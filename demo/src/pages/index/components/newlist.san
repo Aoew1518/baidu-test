@@ -1,0 +1,70 @@
+<template>
+    <div>
+        <div class="list-item" s-for="item, index in list">
+            <div class="list-item-content">
+                <div class="list-item-title">{{item.title}}</div>
+                <div class="list-item-desc">{{item.desc}}</div>
+            </div>
+            <button class="list-item-btn" on-click="del(index)">x</button>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+import {Component} from 'san';
+// 定义组件
+export default class List extends Component {
+
+    static computed = {
+        list() {
+            return this.data.get('list') || [];
+        }
+    }
+
+    static propTypes = {
+        del: Function
+    }
+
+    initData() {
+        return {
+            list: []
+        }
+    }
+
+    del(index) {
+        this.data.splice('list', [index, 1]);
+    }
+}
+</script>
+<style>
+.list-item {
+    height: 50px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #eee;
+}
+.list-item-content {
+    flex: 1;
+}
+.list-item-title {
+    font-size: 20px;
+    color: #333;
+}
+.list-item-desc {
+    font-size: 12px;
+    color: #666;
+}
+.list-item-btn{
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    
+    &:hover {
+        background-color: #ccaadd;
+    }
+}
+</style>

@@ -1,0 +1,101 @@
+<template>
+    <div class="app">
+        <div>{{title}}</div>
+        <div class="header">
+            <input type="text" placeholder="请输入标题" s-ref="inputTitle">
+            <input type="text" placeholder="请输入内容" s-ref="inputValue">
+            <button on-click="handleClick">提交</button>
+        </div>
+        <ui-list list="{{list}}"></ui-list>
+    </div>
+</template>
+
+<script lang="ts">
+import { Component } from 'san';
+import List from '../components/newlist.san';
+
+export default class App extends Component {
+    static components = {
+        'ui-list': List
+    }
+
+    initData() {
+        return {
+            title: '输入验证',
+            list: [
+                {
+                    title: 'vue',
+                    desc: 'vue简单'
+                },
+                {
+                    title: 'react',
+                    desc: 'react简略'
+                },
+                {
+                    title: 'san',
+                    desc: 'san简单又简略'
+                }
+            ]
+        };
+    }
+
+    // 添加
+    handleClick() {
+        const titleElement = this.ref('inputTitle');
+        const inputElement = this.ref('inputValue');
+
+        if (titleElement.value && inputElement.value) {
+            // 方法一：slice 作副本刷新
+            // const list = this.data.get('list');
+            // list.push({
+            //     title: titleElement.value,
+            //     desc: inputElement.value
+            // });
+            // this.data.set('list', list.slice());
+
+            // 方法二：数据源异步直接刷新
+            this.data.push('list', {
+                title: titleElement.value,
+                desc: inputElement.value
+            });
+        }
+
+        titleElement.value = '';
+        inputElement.value = '';
+        console.log(this.data.get('list'));
+    }
+}
+</script>
+<style lang="less">
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    .header {
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        padding: 10px;
+        
+        input {
+            width: 200px;
+            height: 30px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 80px;
+            height: 30px;
+            border: 1px solid #ccc;
+
+            &:hover {
+                background-color: #ccaadd;
+            }
+        }
+    }
+}
+</style>

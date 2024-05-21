@@ -1,0 +1,88 @@
+<template>
+    <div class="app">
+        <div>{{title}}</div>
+        <div class="header">
+            <input type="text" placeholder="请输入标题" s-ref="inputTitle">
+            <input type="text" placeholder="请输入内容" s-ref="inputValue">
+            <button on-click="handleClick">提交</button>
+        </div>
+        <ui-list s-ref="list"></ui-list>
+    </div>
+</template>
+
+<script lang="ts">
+// 数据源在子组件，父组件传递数据到子组件数据源进行渲染
+import {Component} from 'san';
+import List from '../components/list.san';
+
+export default class App extends Component {
+    // 子组件发布'receive'事件，父组件通过message接受，value为其子组件的dom结构
+    static messages = {
+        'receive': function (value) {
+            // console.log(value.target.data);
+        }
+    }
+
+    static components = {
+        'ui-list': List
+    }
+
+    initData() {
+        return {
+            title: '输入验证'
+        };
+    }
+
+    handleClick() {
+        // 获取list组件的引用
+        const listElement = this.ref('list');
+        // 获取输入框元素的标题
+        const titleElement = this.ref('inputTitle');
+        // 获取输入框元素的值
+        const inputElement = this.ref('inputValue');
+
+        // 调用子组件的 addItem 方法，并传入输入框的值
+        listElement.addItem(titleElement.value, inputElement.value);
+
+        // 清空输入框的值
+        titleElement.value = '';
+        inputElement.value = '';
+
+        // 打印更新后的列表（可选，用于调试）
+        console.log(listElement.data.get('list')); // 使用 get 方法来获取数据
+    }
+}
+</script>
+<style lang="less">
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    .header {
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        padding: 10px;
+        
+        input {
+            width: 200px;
+            height: 30px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 80px;
+            height: 30px;
+            border: 1px solid #ccc;
+
+            &:hover {
+                background-color: #ccaadd;
+            }
+        }
+    }
+}
+</style>

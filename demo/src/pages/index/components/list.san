@@ -1,0 +1,101 @@
+<template>
+    <div>
+        <div class="list-item" s-for="item, index in list">
+            <div class="list-item-content">
+                <div class="list-item-title">{{item.title}}</div>
+                <div class="list-item-desc">{{item.desc}}</div>
+            </div>
+            <button class="list-item-btn" on-click="del(index)">x</button>
+        </div>
+    </div>
+</template>
+
+<script lang="ts">
+import {Component} from 'san';
+// 定义组件
+export default class List extends Component {
+    initData() {
+        return {
+            list: [
+                {
+                    title: 'vue',
+                    desc: 'vue简单'
+                },
+                {
+                    title: 'react',
+                    desc: 'react简略'
+                },
+                {
+                    title: 'san',
+                    desc: 'san简单又简略'
+                }
+            ]
+        }
+    }
+    
+    handleList() {
+        console.log('click');
+        this.dispatch('receive', 123);
+    }
+
+    addItem(title, value) {
+        // // 方法一：创建新数组并拼接后续内容再更新给list数据源
+        // const newList = this.data.get('list').concat({
+        //     title: title,
+        //     desc: value
+        // });
+        // this.data.set('list', newList);
+        
+            
+        // 方法二：通过slice替换list来更新list数据源
+        // const list = this.data.get('list');
+        // list.push({
+        //     title: title,
+        //     desc: value
+        // });
+        // this.data.set('list', list.slice()); // 使用 slice 创建数组的新副本以触发更新
+
+        // 方法二：数据源异步刷新
+        this.data.push('list', {
+            title: title,
+            desc: value
+        });
+    }
+
+    del(index) {
+        this.data.splice('list', [index, 1]);
+    }
+}
+</script>
+<style>
+.list-item {
+    height: 50px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #eee;
+}
+.list-item-content {
+    flex: 1;
+}
+.list-item-title {
+    font-size: 20px;
+    color: #333;
+}
+.list-item-desc {
+    font-size: 12px;
+    color: #666;
+}
+.list-item-btn{
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    
+    &:hover {
+        background-color: #ccaadd;
+    }
+}
+</style>
